@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\YuniRetroToolkit.Domain\YuniRetroToolkit.Domain.csproj" />
+    <ProjectReference Include="..\..\src\YuniRetroToolkit.Application\YuniRetroToolkit.Application.csproj" />
+    <ProjectReference Include="..\..\src\YuniRetroToolkit.Infrastructure\YuniRetroToolkit.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\YuniRetroToolkit.GameDefinitions\YuniRetroToolkit.GameDefinitions.csproj" />
+    <ProjectReference Include="..\..\src\YuniRetroToolkit.Backup\YuniRetroToolkit.Backup.csproj" />
+    <Compile Include="..\..\src\YuniRetroToolkit.App\UiSafety.cs" Link="UiSafety.cs" />
+  </ItemGroup>
+</Project>

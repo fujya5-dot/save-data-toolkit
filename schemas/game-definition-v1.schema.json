@@ -1,0 +1,1392 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:yuni-retro-toolkit:schema:game-definition:1.0.0",
+  "title": "Yuni Retro Toolkit Game Definition",
+  "description": "Declarative, non-executable game definition contract for commercial v1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "definitionId",
+    "definitionVersion",
+    "platform",
+    "title",
+    "region",
+    "revision",
+    "romIdentities",
+    "saveFormats",
+    "checksumRules",
+    "entities",
+    "locations",
+    "validationRules",
+    "verificationRules",
+    "riskNotes",
+    "evidence",
+    "provenance",
+    "capabilities"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "definitionId": {
+      "$ref": "#/$defs/id"
+    },
+    "definitionVersion": {
+      "$ref": "#/$defs/semver"
+    },
+    "platform": {
+      "const": "sfc"
+    },
+    "title": {
+      "$ref": "#/$defs/localizedText"
+    },
+    "region": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9-]{1,7}$"
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9._+-]+$"
+    },
+    "romIdentities": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/romIdentity"
+      }
+    },
+    "saveFormats": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": {
+        "$ref": "#/$defs/saveFormat"
+      }
+    },
+    "checksumRules": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "$ref": "#/$defs/checksumRule"
+      },
+      "default": []
+    },
+    "entities": {
+      "$ref": "#/$defs/entities"
+    },
+    "locations": {
+      "$ref": "#/$defs/locations"
+    },
+    "validationRules": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "$ref": "#/$defs/validationRule"
+      }
+    },
+    "verificationRules": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "$ref": "#/$defs/verificationRule"
+      }
+    },
+    "riskNotes": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "$ref": "#/$defs/riskNote"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    },
+    "capabilities": {
+      "$ref": "#/$defs/capabilities"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 96,
+      "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "plainText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^(?!.*(?:https?://|javascript:|<[^>]*>))[^\r\n]*$"
+    },
+    "localizedText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ja",
+        "en"
+      ],
+      "properties": {
+        "ja": {
+          "$ref": "#/$defs/plainText"
+        },
+        "en": {
+          "$ref": "#/$defs/plainText"
+        }
+      }
+    },
+    "typedValue": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 4294967295
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 96,
+          "pattern": "^[A-Za-z0-9._+-]+$"
+        }
+      ]
+    },
+    "romIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "fileSha256",
+        "fileSize",
+        "headerPolicy"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "fileSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "fileSize": {
+          "type": "integer",
+          "minimum": 32,
+          "maximum": 16777216
+        },
+        "headerPolicy": {
+          "enum": [
+            "none",
+            "strip-512-byte-copier-header-for-identification-only"
+          ]
+        },
+        "canonicalSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "notes": {
+          "$ref": "#/$defs/localizedText"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "headerPolicy": {
+                "const": "strip-512-byte-copier-header-for-identification-only"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "canonicalSha256"
+            ]
+          }
+        }
+      ]
+    },
+    "saveFormat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "allowedSizes",
+        "slots"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "allowedSizes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1048576
+          }
+        },
+        "extensionHints": {
+          "type": "array",
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^\\.[A-Za-z0-9]{1,8}$"
+          },
+          "default": []
+        },
+        "slots": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/saveSlot"
+          }
+        }
+      }
+    },
+    "saveSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "offset",
+        "length"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1048575
+        },
+        "length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1048576
+        }
+      }
+    },
+    "entities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "characters",
+        "classes",
+        "stats",
+        "items",
+        "equipment",
+        "skills",
+        "flags"
+      ],
+      "properties": {
+        "characters": {
+          "$ref": "#/$defs/entityArray"
+        },
+        "classes": {
+          "$ref": "#/$defs/entityArray"
+        },
+        "stats": {
+          "$ref": "#/$defs/entityArray"
+        },
+        "items": {
+          "$ref": "#/$defs/entityArray"
+        },
+        "equipment": {
+          "$ref": "#/$defs/entityArray"
+        },
+        "skills": {
+          "$ref": "#/$defs/entityArray"
+        },
+        "flags": {
+          "$ref": "#/$defs/entityArray"
+        }
+      }
+    },
+    "entityArray": {
+      "type": "array",
+      "maxItems": 4096,
+      "items": {
+        "$ref": "#/$defs/entity"
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "labels",
+        "descriptions",
+        "valueSpec",
+        "locationRefs",
+        "visibility",
+        "confidence",
+        "verificationStatus",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "labels": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "descriptions": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "technicalName": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[^\r\n<>]*$"
+        },
+        "valueSpec": {
+          "$ref": "#/$defs/valueSpec"
+        },
+        "locationRefs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "validationRuleRefs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "default": []
+        },
+        "riskNoteRefs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "default": []
+        },
+        "visibility": {
+          "enum": [
+            "normal",
+            "advanced",
+            "hidden"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "verificationStatus": {
+          "$ref": "#/$defs/verificationStatus"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "valueSpec": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "storageMinimum",
+            "storageMaximum",
+            "safeMinimum",
+            "safeMaximum"
+          ],
+          "properties": {
+            "type": {
+              "const": "integer"
+            },
+            "storageMinimum": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 4294967295
+            },
+            "storageMaximum": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 4294967295
+            },
+            "safeMinimum": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 4294967295
+            },
+            "safeMaximum": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 4294967295
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "values"
+          ],
+          "properties": {
+            "type": {
+              "const": "enum"
+            },
+            "values": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 4096,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "value",
+                  "labels"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "value": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4294967295
+                  },
+                  "labels": {
+                    "$ref": "#/$defs/localizedText"
+                  },
+                  "reserved": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "flags"
+          ],
+          "properties": {
+            "type": {
+              "const": "bitset"
+            },
+            "flags": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 32,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "bit",
+                  "labels"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "bit": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 31
+                  },
+                  "labels": {
+                    "$ref": "#/$defs/localizedText"
+                  },
+                  "reserved": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "locations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "save",
+        "ram"
+      ],
+      "properties": {
+        "save": {
+          "type": "array",
+          "maxItems": 8192,
+          "items": {
+            "$ref": "#/$defs/saveLocation"
+          }
+        },
+        "ram": {
+          "type": "array",
+          "maxItems": 8192,
+          "items": {
+            "$ref": "#/$defs/ramLocation"
+          }
+        }
+      }
+    },
+    "saveLocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "saveFormatId",
+        "slotId",
+        "offset",
+        "widthBytes",
+        "endianness",
+        "access"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "saveFormatId": {
+          "$ref": "#/$defs/id"
+        },
+        "slotId": {
+          "$ref": "#/$defs/id"
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1048575
+        },
+        "widthBytes": {
+          "enum": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "endianness": {
+          "enum": [
+            "little",
+            "big"
+          ]
+        },
+        "bitMask": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "shift": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 31
+        },
+        "access": {
+          "enum": [
+            "read-only",
+            "read-write"
+          ]
+        },
+        "mirrorGroupId": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "ramLocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "addressSpace",
+        "address",
+        "widthBytes",
+        "endianness",
+        "access",
+        "lifecycleConditionId"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "addressSpace": {
+          "const": "sfc-bus"
+        },
+        "address": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16777215
+        },
+        "widthBytes": {
+          "enum": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "endianness": {
+          "enum": [
+            "little",
+            "big"
+          ]
+        },
+        "access": {
+          "enum": [
+            "read-only",
+            "read-write"
+          ]
+        },
+        "lifecycleConditionId": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "byteRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "offset",
+        "length"
+      ],
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1048575
+        },
+        "length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1048576
+        }
+      }
+    },
+    "checksumRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "algorithmId",
+        "inputRanges",
+        "outputLocationRef",
+        "order",
+        "testVectorEvidenceRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "algorithmId": {
+          "enum": [
+            "sum8",
+            "sum16-le",
+            "sum16-be",
+            "crc16-ccitt-false",
+            "mirror-copy"
+          ]
+        },
+        "inputRanges": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/byteRange"
+          }
+        },
+        "excludedRanges": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/byteRange"
+          },
+          "default": []
+        },
+        "outputLocationRef": {
+          "$ref": "#/$defs/id"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1024
+        },
+        "testVectorEvidenceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "validationRule": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/relationRule"
+        },
+        {
+          "$ref": "#/$defs/membershipRule"
+        },
+        {
+          "$ref": "#/$defs/checksumValidationRule"
+        },
+        {
+          "$ref": "#/$defs/combinationRule"
+        }
+      ]
+    },
+    "ruleBaseProperties": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "blocking": {
+          "type": "boolean"
+        },
+        "message": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "relationRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "leftRef",
+        "operator",
+        "rightRef",
+        "severity",
+        "blocking",
+        "message",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "relation"
+        },
+        "leftRef": {
+          "$ref": "#/$defs/id"
+        },
+        "operator": {
+          "enum": [
+            "lt",
+            "lte",
+            "eq",
+            "neq",
+            "gte",
+            "gt"
+          ]
+        },
+        "rightRef": {
+          "$ref": "#/$defs/id"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "blocking": {
+          "type": "boolean"
+        },
+        "message": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "membershipRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "subjectRef",
+        "allowedValues",
+        "severity",
+        "blocking",
+        "message",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "membership"
+        },
+        "subjectRef": {
+          "$ref": "#/$defs/id"
+        },
+        "allowedValues": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4096,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/typedValue"
+          }
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "blocking": {
+          "type": "boolean"
+        },
+        "message": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "checksumValidationRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "checksumRuleRef",
+        "severity",
+        "blocking",
+        "message",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "checksum-match"
+        },
+        "checksumRuleRef": {
+          "$ref": "#/$defs/id"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "blocking": {
+          "type": "boolean"
+        },
+        "message": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "combinationRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "conditions",
+        "severity",
+        "blocking",
+        "message",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "required-combination",
+            "forbidden-combination"
+          ]
+        },
+        "conditions": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "subjectRef",
+              "equals"
+            ],
+            "properties": {
+              "subjectRef": {
+                "$ref": "#/$defs/id"
+              },
+              "equals": {
+                "$ref": "#/$defs/typedValue"
+              }
+            }
+          }
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "blocking": {
+          "type": "boolean"
+        },
+        "message": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "verificationRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "level",
+        "romIdentityRef",
+        "saveFormatRef",
+        "preconditionIds",
+        "stimulus",
+        "observation",
+        "timeoutMs",
+        "retryCount",
+        "cleanup",
+        "evidenceRequirements"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "level": {
+          "enum": [
+            "data",
+            "load",
+            "effect"
+          ]
+        },
+        "romIdentityRef": {
+          "$ref": "#/$defs/id"
+        },
+        "saveFormatRef": {
+          "$ref": "#/$defs/id"
+        },
+        "preconditionIds": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "stimulus": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "operationId"
+              ],
+              "properties": {
+                "operationId": {
+                  "enum": [
+                    "none",
+                    "save-read",
+                    "ares-load"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "operationId",
+                "subjectRef",
+                "value"
+              ],
+              "properties": {
+                "operationId": {
+                  "enum": [
+                    "save-write-working-copy",
+                    "ares-set-typed-value",
+                    "ares-clear-typed-value"
+                  ]
+                },
+                "subjectRef": {
+                  "$ref": "#/$defs/id"
+                },
+                "value": {
+                  "$ref": "#/$defs/typedValue"
+                }
+              }
+            }
+          ]
+        },
+        "observation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "locationRef",
+            "comparator",
+            "expected"
+          ],
+          "properties": {
+            "locationRef": {
+              "$ref": "#/$defs/id"
+            },
+            "comparator": {
+              "enum": [
+                "eq",
+                "neq",
+                "in-range",
+                "stable-for-frames"
+              ]
+            },
+            "expected": {
+              "$ref": "#/$defs/typedValue"
+            },
+            "stableFrames": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 600
+            }
+          }
+        },
+        "timeoutMs": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 300000
+        },
+        "retryCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "cleanup": {
+          "enum": [
+            "none",
+            "clear-tweak",
+            "terminate-session-and-delete-staging"
+          ]
+        },
+        "evidenceRequirements": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "structured-observation",
+              "before-after-hash",
+              "ares-build-hash",
+              "definition-hash",
+              "reviewer-approval"
+            ]
+          }
+        }
+      }
+    },
+    "verificationStatus": {
+      "enum": [
+        "experimental",
+        "documented",
+        "data_verified",
+        "load_verified",
+        "effect_verified"
+      ]
+    },
+    "riskNote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "severity",
+        "category",
+        "message",
+        "mitigation",
+        "visibility"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "severity": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "category": {
+          "enum": [
+            "data-loss",
+            "soft-lock",
+            "event-progression",
+            "reserved-value",
+            "runtime-instability",
+            "unknown"
+          ]
+        },
+        "message": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "mitigation": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "visibility": {
+          "enum": [
+            "normal",
+            "advanced",
+            "hidden"
+          ]
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "sha256",
+        "createdAt",
+        "scope",
+        "reviewStatus"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "specification",
+            "synthetic-test-vector",
+            "data-verification-report",
+            "load-verification-report",
+            "effect-verification-report",
+            "clean-room-review"
+          ]
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "scope": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "reviewStatus": {
+          "enum": [
+            "pending",
+            "approved",
+            "rejected"
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "methods",
+        "author",
+        "createdAt",
+        "rightsBasis",
+        "cleanRoomReview"
+      ],
+      "properties": {
+        "methods": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "independent-research",
+              "public-documentation",
+              "user-supplied-observation",
+              "synthetic-fixture"
+            ]
+          }
+        },
+        "author": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\r\n<>]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "rightsBasis": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "pattern": "^[^\r\n<>]*$"
+        },
+        "cleanRoomReview": {
+          "enum": [
+            "pending",
+            "approved",
+            "rejected"
+          ]
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requiredAppCapabilities",
+        "saveEdit",
+        "inGameTweaks",
+        "verificationLevels"
+      ],
+      "properties": {
+        "requiredAppCapabilities": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "saveEdit": {
+          "type": "boolean"
+        },
+        "inGameTweaks": {
+          "type": "boolean"
+        },
+        "verificationLevels": {
+          "type": "array",
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "data",
+              "load",
+              "effect"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

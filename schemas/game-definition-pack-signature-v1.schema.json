@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:yuni-retro-toolkit:schema:game-definition-pack-signature:1.0.0",
+  "title": "Yuni Retro Toolkit Game Definition Pack Signature",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "algorithm",
+    "keyId",
+    "manifestSha256",
+    "signatureBase64Url"
+  ],
+  "properties": {
+    "algorithm": {
+      "const": "Ed25519"
+    },
+    "keyId": {
+      "type": "string",
+      "pattern": "^ed25519:[a-f0-9]{64}$"
+    },
+    "manifestSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "signatureBase64Url": {
+      "type": "string",
+      "minLength": 86,
+      "maxLength": 86,
+      "pattern": "^[A-Za-z0-9_-]{86}$"
+    }
+  }
+}

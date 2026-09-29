@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <SupportedOSPlatformVersion>10.0.26100.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\YuniRetroToolkit.Domain\YuniRetroToolkit.Domain.csproj" />
+    <ProjectReference Include="..\YuniRetroToolkit.Application\YuniRetroToolkit.Application.csproj" />
+    <ProjectReference Include="..\YuniRetroToolkit.Infrastructure\YuniRetroToolkit.Infrastructure.csproj" />
+    <ProjectReference Include="..\YuniRetroToolkit.GameDefinitions\YuniRetroToolkit.GameDefinitions.csproj" />
+    <ProjectReference Include="..\YuniRetroToolkit.Backup\YuniRetroToolkit.Backup.csproj" />
+    <ProjectReference Include="..\YuniRetroToolkit.Security\YuniRetroToolkit.Security.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\schemas\*.json" Link="schemas\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\demo\assets\*" Link="demo\assets\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\release\official-packs\yuni.demo.synthetic\1.0.0\yuni.demo.synthetic-1.0.0.yrtpack" Link="demo\yuni.demo.synthetic-1.0.0.yrtpack" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Resources\Guide\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

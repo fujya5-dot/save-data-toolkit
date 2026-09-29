@@ -1,0 +1,42 @@
+{
+  "categories": [
+    {
+      "id": "beginner",
+      "title": "Getting started",
+      "steps": [
+        { "id": "open", "title": "1. Open", "body": "Choose a save and an identity file. The original save remains read-only." },
+        { "id": "slot", "title": "2. Choose a slot", "body": "Check whether a slot is used or empty, then choose the edit target. Empty slots are not written." },
+        { "id": "edit", "title": "3. Edit", "body": "Change only fields exposed by the Pack and stay within the displayed allowed range." },
+        { "id": "backup", "title": "4. Back up", "body": "A verified backup is created before a file is written." },
+        { "id": "validate", "title": "5. Validate", "body": "Review changes and validation. Writing stops when a required safety condition is missing." },
+        { "id": "apply", "title": "6. Export", "body": "After review, export a new file. The original save is not overwritten." }
+      ]
+    },
+    {
+      "id": "features",
+      "title": "Feature guide",
+      "steps": [
+        { "id": "modes", "title": "Simple / Advanced", "body": "These modes present the same data for different needs. Switching modes does not discard changes." },
+        { "id": "search", "title": "Search", "body": "Find currently available fields by label, description, or Pack-supplied keyword." },
+        { "id": "favorites", "title": "Favorites", "body": "Save local references to frequently used fields. The Pack and save are not modified." },
+        { "id": "slots", "title": "Slots", "body": "Review each slot state and its pending-change count. Common data is tracked separately." },
+        { "id": "backup-restore", "title": "Backup and restore", "body": "A restored backup is also saved as a new file." },
+        { "id": "validation", "title": "Validation", "body": "Declared constraints and integrity rules are checked, and invalid writes are rejected." },
+        { "id": "packs", "title": "Compatibility Pack", "body": "Compatibility data is added as signed declarative data. Packs contain no executable code." }
+      ]
+    },
+    {
+      "id": "advanced",
+      "title": "Glossary",
+      "steps": [
+        { "id": "offset", "title": "Offset", "body": "The location of a value inside a save." },
+        { "id": "endian", "title": "Endian", "body": "The byte order used for a multi-byte value." },
+        { "id": "checksum", "title": "Checksum", "body": "A value used to check data integrity." },
+        { "id": "runtime-cheat", "title": "Runtime Cheat", "body": "This means changing a running game's memory. It is separate from save editing and is not a current feature." },
+        { "id": "pack", "title": "Pack", "body": "Declarative, non-executable data containing game-specific information." },
+        { "id": "trust", "title": "Trust", "body": "The boundary that verifies signatures, hashes, and compatibility and rejects untrusted Packs." },
+        { "id": "capability", "title": "Capability", "body": "A feature contract explicitly supported by Core. Unknown required capabilities are rejected." }
+      ]
+    }
+  ]
+}

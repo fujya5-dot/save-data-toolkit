@@ -1,0 +1,42 @@
+{
+  "categories": [
+    {
+      "id": "beginner",
+      "title": "はじめて使う方へ",
+      "steps": [
+        { "id": "open", "title": "1. 開く", "body": "セーブと識別用ファイルを選びます。元のセーブは読み取り専用です。" },
+        { "id": "slot", "title": "2. スロットを選ぶ", "body": "使用中または空の状態を確認し、編集対象のスロットを選びます。空スロットには書き込みません。" },
+        { "id": "edit", "title": "3. 編集する", "body": "Packが公開した項目だけを、表示された許容範囲内で変更します。" },
+        { "id": "backup", "title": "4. バックアップ", "body": "書き込み前に検証済みバックアップが作成されます。" },
+        { "id": "validate", "title": "5. 検証する", "body": "変更内容とValidation結果を確認します。安全条件が不足すると停止します。" },
+        { "id": "apply", "title": "6. 書き出す", "body": "確認後、新しいファイルとして書き出します。元のセーブは上書きしません。" }
+      ]
+    },
+    {
+      "id": "features",
+      "title": "機能ガイド",
+      "steps": [
+        { "id": "modes", "title": "Simple / Advanced", "body": "同じデータを用途別に表示します。モード変更で変更内容は失われません。" },
+        { "id": "search", "title": "検索", "body": "項目名、説明、Packの検索キーワードから、現在のモードで利用できる項目を探します。" },
+        { "id": "favorites", "title": "お気に入り", "body": "よく使う項目へのローカル参照を保存します。Packやセーブ自体は変更しません。" },
+        { "id": "slots", "title": "スロット", "body": "スロットごとの状態と未適用変更数を確認できます。共通データは別に管理されます。" },
+        { "id": "backup-restore", "title": "バックアップと復元", "body": "バックアップから復元するときも、新しいファイルとして保存します。" },
+        { "id": "validation", "title": "Validation", "body": "Packが宣言した制約と整合性規則を確認し、不正な書き込みを拒否します。" },
+        { "id": "packs", "title": "Compatibility Pack", "body": "対応情報は署名済み宣言データとして追加されます。Packに実行コードは含まれません。" }
+      ]
+    },
+    {
+      "id": "advanced",
+      "title": "用語集",
+      "steps": [
+        { "id": "offset", "title": "Offset", "body": "セーブ内で値が置かれている位置です。" },
+        { "id": "endian", "title": "Endian", "body": "複数バイト値を並べる順序です。" },
+        { "id": "checksum", "title": "Checksum", "body": "データの整合性確認に使う値です。" },
+        { "id": "runtime-cheat", "title": "Runtime Cheat", "body": "実行中ゲームのメモリ変更を指します。このツールのセーブ編集とは別物で、現在の機能ではありません。" },
+        { "id": "pack", "title": "Pack", "body": "ゲーム固有情報を含む、実行コードを持たない宣言データです。" },
+        { "id": "trust", "title": "Trust", "body": "署名、ハッシュ、互換性を検証し、信頼できないPackを拒否する境界です。" },
+        { "id": "capability", "title": "Capability", "body": "Coreが対応すると明示した機能契約です。未知の必須Capabilityは拒否されます。" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\YuniRetroToolkit.GameDefinitions\YuniRetroToolkit.GameDefinitions.csproj" />
+  </ItemGroup>
+</Project>

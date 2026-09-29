@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\YuniRetroToolkit.Domain\YuniRetroToolkit.Domain.csproj" />
+    <ProjectReference Include="..\YuniRetroToolkit.Application\YuniRetroToolkit.Application.csproj" />
+  </ItemGroup>
+</Project>
+

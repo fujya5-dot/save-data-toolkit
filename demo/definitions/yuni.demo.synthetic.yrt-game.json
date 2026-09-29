@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "1.0.0",
+  "definitionId": "yuni.demo.synthetic",
+  "definitionVersion": "1.0.0",
+  "platform": "sfc",
+  "title": {"ja": "Save Data Toolkit Synthetic Demo", "en": "Save Data Toolkit Synthetic Demo"},
+  "region": "DEMO",
+  "revision": "synthetic-v1",
+  "romIdentities": [
+    {
+      "id": "identity.synthetic.v1",
+      "fileSha256": "bb391415c05e39d77ca17381d3be3f7d0cd5e5332e5a579311adaa0aa62106e9",
+      "fileSize": 32,
+      "headerPolicy": "none",
+      "notes": {"ja": "YuniWorksが生成したDemo identity。ROMではありません。", "en": "YuniWorks-generated demo identity. This is not a ROM."}
+    }
+  ],
+  "saveFormats": [
+    {
+      "id": "save.synthetic.v1",
+      "allowedSizes": [64],
+      "extensionHints": [".srm"],
+      "slots": [{"id": "slot.synthetic", "offset": 0, "length": 64}]
+    }
+  ],
+  "checksumRules": [
+    {
+      "id": "checksum.synthetic",
+      "algorithmId": "sum8",
+      "inputRanges": [{"offset": 0, "length": 63}],
+      "excludedRanges": [],
+      "outputLocationRef": "loc.checksum",
+      "order": 0,
+      "testVectorEvidenceRefs": ["ev.synthetic"]
+    }
+  ],
+  "entities": {
+    "characters": [],
+    "classes": [],
+    "stats": [
+      {
+        "id": "demo.level",
+        "labels": {"ja": "Demo Level（1 / 7）", "en": "Demo Level (1 / 7)"},
+        "descriptions": {"ja": "Synthetic Save内の2つのmirror値を同時に更新します。", "en": "Updates two mirrored values in the Synthetic Save."},
+        "valueSpec": {"type": "integer", "storageMinimum": 0, "storageMaximum": 255, "safeMinimum": 1, "safeMaximum": 7},
+        "locationRefs": ["loc.level.a", "loc.level.b"],
+        "validationRuleRefs": ["rule.level.allowed"],
+        "riskNoteRefs": [],
+        "visibility": "normal",
+        "confidence": "high",
+        "verificationStatus": "effect_verified",
+        "evidenceRefs": ["ev.synthetic"]
+      }
+    ],
+    "items": [],
+    "equipment": [],
+    "skills": [],
+    "flags": []
+  },
+  "locations": {
+    "save": [
+      {"id": "loc.level.a", "saveFormatId": "save.synthetic.v1", "slotId": "slot.synthetic", "offset": 1, "widthBytes": 1, "endianness": "little", "access": "read-write"},
+      {"id": "loc.level.b", "saveFormatId": "save.synthetic.v1", "slotId": "slot.synthetic", "offset": 2, "widthBytes": 1, "endianness": "little", "access": "read-write"},
+      {"id": "loc.checksum", "saveFormatId": "save.synthetic.v1", "slotId": "slot.synthetic", "offset": 63, "widthBytes": 1, "endianness": "little", "access": "read-write"}
+    ],
+    "ram": []
+  },
+  "validationRules": [
+    {
+      "id": "rule.level.allowed",
+      "kind": "membership",
+      "subjectRef": "demo.level",
+      "allowedValues": [1, 7],
+      "severity": "error",
+      "blocking": true,
+      "message": {"ja": "Synthetic Demoの確認値は1と7だけです。", "en": "Only 1 and 7 are enabled for the Synthetic Demo."},
+      "evidenceRefs": ["ev.synthetic"]
+    }
+  ],
+  "verificationRules": [],
+  "riskNotes": [],
+  "evidence": [
+    {
+      "id": "ev.synthetic",
+      "kind": "synthetic-test-vector",
+      "sha256": "106bd535d0575ab6e52cd87749dce6c7017ad8e6176d43a2e9bd048dd62454e7",
+      "createdAt": "2026-09-22T00:00:00Z",
+      "scope": ["demo.level", "checksum.synthetic"],
+      "reviewStatus": "approved"
+    }
+  ],
+  "provenance": {
+    "methods": ["synthetic-fixture"],
+    "author": "YuniWorks",
+    "createdAt": "2026-09-22T00:00:00Z",
+    "rightsBasis": "Generated synthetic bytes and original declarative metadata only. No ROM, game data, or third-party assets.",
+    "cleanRoomReview": "approved"
+  },
+  "capabilities": {
+    "requiredAppCapabilities": ["save.read.v1", "save.write.integer.v1", "checksum.sum8.v1"],
+    "saveEdit": true,
+    "inGameTweaks": false,
+    "verificationLevels": ["data"]
+  }
+}
