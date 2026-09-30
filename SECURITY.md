@@ -8,6 +8,6 @@ The Core opens original saves read-only, works on a copy, checks declared struct
 
 ## Reporting a vulnerability
 
-When the public GitHub repository is available, use its **Security → Report a vulnerability** private reporting option if enabled. Do not include exploit details, personal saves, ROMs, credentials, or private data in a public issue. If private reporting is unavailable, open a public issue containing only a request for a private contact channel, without technical exploit details. This document does not claim that a private reporting channel or security email already exists.
+Use this repository's **Security → Report a vulnerability** private reporting option if enabled. Do not include exploit details, personal saves, ROMs, credentials, or private data in a public issue. If private reporting is unavailable, open a public issue containing only a request for a private contact channel, without technical exploit details. This document does not claim that a private reporting channel or security email already exists.
 
 Please include the affected Core version, a minimal synthetic reproducer, impact, and safe reproduction steps. Give maintainers a reasonable opportunity to investigate before public disclosure. Security-sensitive changes to pack verification, file handling, backup, or release integrity require focused review and tests.

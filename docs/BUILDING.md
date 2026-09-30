@@ -35,3 +35,9 @@ dotnet run --project tests/YuniRetroToolkit.PublicTests/YuniRetroToolkit.PublicT
 The runner exits nonzero on a failed test or if Windows Application Control blocks a Core assembly before tests run. It prints a final pass/fail count when tests complete. This is a focused Core smoke suite, not the private full-release test suite.
 
 These commands build locally. They do not produce an approved public release, signed binary, or complete distribution notices. A later public binary release must preserve the Microsoft and upstream license/notice files listed in [Third-party notices](../THIRD_PARTY_NOTICES.md).
+
+## Planned unsigned portable preview
+
+The repository-controlled `tools/release/build-unsigned-preview.ps1` creates a self-contained Windows x64 portable ZIP, its SHA-256 file, and a signing-boundary inventory. The public GitHub Actions workflow runs it after the 19 Core tests and uploads the generated files. This does not create or publish a GitHub Release and does not sign binaries. The ZIP contains the Core, Synthetic Demo, MPL-2.0 license, upstream notices, and per-file hashes; it contains no paid Compatibility Pack.
+
+To use a published portable ZIP, extract it to a folder you control and run `YuniRetroToolkit.App.exe` there. No installer, administrator privilege, or system configuration change is required. To remove the application, close it and delete that extracted folder. Local settings, diagnostics, backups, imported packs, and exported saves may exist outside that folder at locations you chose or within the app's local data folder; review them before deleting. See [Privacy](../PRIVACY.md) for data handling. There is no uninstaller because no installer is provided.

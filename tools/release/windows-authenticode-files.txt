@@ -1,0 +1,9 @@
+# Future signing candidates only. Paths are relative to the portable ZIP root.
+YuniRetroToolkit.App.exe
+YuniRetroToolkit.App.dll
+YuniRetroToolkit.Application.dll
+YuniRetroToolkit.Backup.dll
+YuniRetroToolkit.Domain.dll
+YuniRetroToolkit.GameDefinitions.dll
+YuniRetroToolkit.Infrastructure.dll
+YuniRetroToolkit.Security.dll

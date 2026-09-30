@@ -1,0 +1,40 @@
+name: Public Core and unsigned preview
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-and-package:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.400
+      - name: Restore app and public tests
+        run: |
+          dotnet restore src/YuniRetroToolkit.App/YuniRetroToolkit.App.csproj
+          dotnet restore tests/YuniRetroToolkit.PublicTests/YuniRetroToolkit.PublicTests.csproj
+      - name: Build app and public tests
+        run: |
+          dotnet build src/YuniRetroToolkit.App/YuniRetroToolkit.App.csproj -c Release --no-restore -warnaserror
+          dotnet build tests/YuniRetroToolkit.PublicTests/YuniRetroToolkit.PublicTests.csproj -c Release --no-restore -warnaserror
+      - name: Run 19 public Core tests
+        run: dotnet run --project tests/YuniRetroToolkit.PublicTests/YuniRetroToolkit.PublicTests.csproj -c Release --no-build --no-restore
+      - name: Build unsigned portable ZIP
+        shell: pwsh
+        run: ./tools/release/build-unsigned-preview.ps1
+      - name: Upload unsigned ZIP and evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: save-data-toolkit-unsigned-preview
+          path: |
+            artifacts/public-preview/*-UNSIGNED.zip
+            artifacts/public-preview/ARTIFACTS-SHA256.txt
+            artifacts/public-preview/signing-boundary.json
+          if-no-files-found: error

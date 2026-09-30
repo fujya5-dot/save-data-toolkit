@@ -13,6 +13,8 @@ The clean public source repository does not include framework or SDK binaries. A
 
 No upstream package binary belongs in the public source set. Verify each future binary distribution against its exact package files and signatures.
 
-**Release gate:** before any public Windows binary release, include the applicable .NET, WPF, Windows SDK, and C#/WinRT license/notice texts with the *actual* distribution. In particular, include Windows SDK/CsWinRT notices for the two named DLLs, verify package versions and the file list, and preserve Microsoft signatures. A link in this repository alone does not complete a future binary's notice obligations.
+**Release gate:** before any public Windows binary release, include the applicable .NET, WPF, Windows SDK, and C#/WinRT license/notice texts with the *actual* distribution. The release script copies the framework notices from the pinned SDK and the Windows SDK 10.0.26100.0 license/third-party notices and C#/WinRT MIT text from `licenses/`; it fails if any input is missing. Verify the final package versions, file list, and Microsoft signatures. A link in this repository alone does not complete a future binary's notice obligations.
+
+The two Windows SDK RTF files in `licenses/` were taken from the installed Microsoft Windows SDK 10.0.26100.0 `Licenses/10.0.26100.0` directory. The C#/WinRT MIT text comes from the [official Microsoft CsWinRT repository](https://github.com/microsoft/CsWinRT/blob/master/LICENSE). They are legal notices, not project source or signing targets.
 
 Build-only .NET SDK tools, private verification tooling, and ares are not shipped with the OSS Core. A separately sold proprietary declarative Compatibility Pack is not an upstream Core dependency and is outside this notice inventory. See [Code-signing policy](CODE_SIGNING_POLICY.md) for ownership boundaries and [Core and Packs](docs/CORE_AND_PACKS.md) for license scope.
