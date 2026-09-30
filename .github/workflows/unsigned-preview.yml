@@ -18,7 +18,7 @@ jobs:
           dotnet-version: 10.0.400
       - name: Restore app and public tests
         run: |
-          dotnet restore src/YuniRetroToolkit.App/YuniRetroToolkit.App.csproj
+          dotnet restore src/YuniRetroToolkit.App/YuniRetroToolkit.App.csproj -r win-x64 -p:SelfContained=true
           dotnet restore tests/YuniRetroToolkit.PublicTests/YuniRetroToolkit.PublicTests.csproj
       - name: Build app and public tests
         run: |
