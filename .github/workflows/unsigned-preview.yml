@@ -12,8 +12,8 @@ jobs:
   verify-and-package:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0.400
       - name: Restore app and public tests
@@ -30,7 +30,7 @@ jobs:
         shell: pwsh
         run: ./tools/release/build-unsigned-preview.ps1
       - name: Upload unsigned ZIP and evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: save-data-toolkit-unsigned-preview
           path: |
