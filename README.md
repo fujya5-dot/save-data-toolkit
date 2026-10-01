@@ -17,7 +17,7 @@ The editing path is **Backup → Validate → Diff → Apply → Verify → Roll
 
 The confirmed preview environment is Windows 11 x64. Windows compatibility details are being finalized; Windows 10 support is not claimed here. Building requires the .NET SDK version pinned in `global.json` (10.0.400). This is preview source documentation, not an announcement of a published binary, Microsoft Store listing, or SignPath approval.
 
-See [Building](docs/BUILDING.md) for local build steps, [Core and Packs](docs/CORE_AND_PACKS.md) for the free/proprietary boundary, [Security](SECURITY.md) for vulnerability reporting, [Privacy](PRIVACY.md) for local data handling, and the [Code signing policy](CODE_SIGNING_POLICY.md). The [unsigned preview release notes template](docs/UNSIGNED_PREVIEW_RELEASE_NOTES.md) describes the planned portable ZIP; no binary release is published yet.
+See [Building](docs/BUILDING.md) for local build steps, [Core and Packs](docs/CORE_AND_PACKS.md) for the free/proprietary boundary, [Security](SECURITY.md) for vulnerability reporting, [Privacy](PRIVACY.md) for local data handling, and the [Code signing policy](CODE_SIGNING_POLICY.md). The [unsigned preview release notes template](docs/UNSIGNED_PREVIEW_RELEASE_NOTES.md) describes the planned portable ZIP; An unsigned OSS Preview release is now publicly available.
 
 ## Demo and licensing
 
